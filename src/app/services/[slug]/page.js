@@ -43,9 +43,6 @@ export default async function ServicePage({ params }) {
 
       <section className='section section--light'>
         <div className='site-container service-detail'>
-          <div className='service-detail__icon'>
-            <Icon name={service.icon} />
-          </div>
           <div className='service-detail__content'>
             <p className='eyebrow'>Built for your home</p>
             <h2>{service.intro}</h2>
