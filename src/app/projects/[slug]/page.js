@@ -55,7 +55,9 @@ export default async function ProjectPage({ params }) {
             <span>Region</span>
             <strong>{project.location}</strong>
           </div>
-          <Link href='/projects'>All projects</Link>
+          <Link className='project-meta__all-projects' href='/projects'>
+            See All Projects
+          </Link>
         </div>
       </section>
 

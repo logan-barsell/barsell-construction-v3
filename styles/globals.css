@@ -1913,6 +1913,14 @@ p {
     grid-column: auto;
   }
 
+  .project-meta__inner > .project-meta__all-projects {
+    min-height: 3.5rem;
+    justify-self: start;
+    margin: 1rem var(--gutter);
+    border: 0;
+    padding-inline: 1.5rem;
+  }
+
   .lightbox {
     padding-inline: 0.5rem;
   }
