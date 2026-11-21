@@ -3,162 +3,114 @@ import '../../styles/globals.css';
 import { Roboto, Alegreya_SC } from 'next/font/google';
 import Header from '@/components/Header';
 import Footer from '@/components/Footer';
-import PageTransition from '@/components/PageTransition';
+import { site } from '@/data/site';
 
-const roboto = Roboto({ weight: '400', subsets: ['latin'], display: 'swap' });
-const alegreyaSC = Alegreya_SC({
-  weight: '400',
+const roboto = Roboto({
+  weight: ['400', '500', '700'],
   subsets: ['latin'],
   display: 'swap',
+  variable: '--font-body',
+});
+const alegreyaSC = Alegreya_SC({
+  weight: ['400', '500', '700'],
+  subsets: ['latin'],
+  display: 'swap',
+  variable: '--font-display',
 });
 
 export const metadata = {
-  title: 'Barsell Construction Inc.',
-  description: `Serving the Bay Area for over 25 years, Barsell Construction Inc. is the tried and true business to get your home looking how you've always dreamed.`,
+  metadataBase: new URL(site.url),
+  title: {
+    default: site.name,
+    template: `%s | ${site.shortName}`,
+  },
+  description: site.description,
+  alternates: {
+    canonical: '/',
+  },
+  openGraph: {
+    type: 'website',
+    url: site.url,
+    title: site.name,
+    description: site.description,
+    siteName: site.name,
+    images: [{ url: '/images/OG.png', width: 1200, height: 630 }],
+  },
+  twitter: {
+    card: 'summary_large_image',
+    title: site.name,
+    description: site.description,
+    images: ['/images/OG.png'],
+  },
+  robots: {
+    index: true,
+    follow: true,
+  },
+  icons: {
+    icon: [
+      { url: '/images/favicons/favicon.ico' },
+      {
+        url: '/images/favicons/favicon-32x32.png',
+        sizes: '32x32',
+        type: 'image/png',
+      },
+      {
+        url: '/images/favicons/favicon-16x16.png',
+        sizes: '16x16',
+        type: 'image/png',
+      },
+    ],
+    apple: '/images/favicons/apple-touch-icon.png',
+  },
+};
+
+export const viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#111111',
 };
 
 export default function RootLayout({ children }) {
+  const structuredData = {
+    '@context': 'https://schema.org',
+    '@type': 'GeneralContractor',
+    name: site.name,
+    image: `${site.url}/images/OG.png`,
+    logo: `${site.url}/images/logos/bclogo.png`,
+    url: site.url,
+    telephone: '+1-925-260-4331',
+    email: site.email.display,
+    foundingDate: String(site.founded),
+    address: {
+      '@type': 'PostalAddress',
+      addressLocality: 'Alamo',
+      addressRegion: 'CA',
+      addressCountry: 'US',
+    },
+    areaServed: {
+      '@type': 'Place',
+      name: site.serviceArea,
+    },
+    description: site.description,
+    sameAs: site.social.map(item => item.href),
+  };
+
   return (
     <html lang='en'>
       <head>
-        {/* Favicons */}
-        <link
-          rel='icon'
-          href='/images/favicons/favicon.ico'
-        />
-        <link
-          rel='apple-touch-icon'
-          sizes='180x180'
-          href='/images/favicons/apple-touch-icon.png'
-        />
-        <link
-          rel='icon'
-          type='image/png'
-          sizes='32x32'
-          href='/images/favicons/favicon-32x32.png'
-        />
-        <link
-          rel='icon'
-          type='image/png'
-          sizes='16x16'
-          href='/images/favicons/favicon-16x16.png'
-        />
-        <link
-          rel='icon'
-          type='image/png'
-          sizes='192x192'
-          href='/images/favicons/android-chrome-192x192.png'
-        />
-        <link
-          rel='icon'
-          type='image/png'
-          sizes='512x512'
-          href='/images/favicons/android-chrome-512x512.png'
-        />
-        <link
-          rel='manifest'
-          href='/images/favicons/site.webmanifest'
-        />
-        <link
-          rel='preload'
-          as='image'
-          href='/images/bg.webp'
-          type='image/webp'
-        />
-
-        <meta
-          name='theme-color'
-          content='#ffffff'
-        />
-        <meta
-          name='viewport'
-          content='width=device-width, initial-scale=1'
-        />
-        <meta
-          name='robots'
-          content='index, follow'
-        />
-
-        {/* Open Graph */}
-        <meta
-          property='og:title'
-          content='Barsell Construction Inc.'
-        />
-        <meta
-          property='og:description'
-          content="Serving the Bay Area for over 25 years, Barsell Construction Inc. is the tried and true business to get your home looking how you've always dreamed."
-        />
-        <meta
-          property='og:image'
-          content='/images/OG.png'
-        />
-        <meta
-          property='og:type'
-          content='website'
-        />
-        <meta
-          property='og:url'
-          content='https://barsellconstruction.com'
-        />
-
-        {/* Twitter Card */}
-        <meta
-          name='twitter:card'
-          content='summary_large_image'
-        />
-        <meta
-          name='twitter:title'
-          content='Barsell Construction Inc.'
-        />
-        <meta
-          name='twitter:description'
-          content="Serving the Bay Area for over 25 years, Barsell Construction Inc. is the tried and true business to get your home looking how you've always dreamed."
-        />
-        <meta
-          name='twitter:image'
-          content='/images/OG.png'
-        />
-
-        {/* Structured Data */}
         <script
           type='application/ld+json'
           dangerouslySetInnerHTML={{
-            __html: JSON.stringify({
-              '@context': 'https://schema.org',
-              '@type': 'LocalBusiness',
-              name: 'Barsell Construction Inc.',
-              image: 'https://barsellconstruction.com/images/OG.png',
-              url: 'https://barsellconstruction.com',
-              telephone: '+1-925-260-4331',
-              address: {
-                '@type': 'PostalAddress',
-                addressLocality: 'Alamo',
-                addressRegion: 'CA',
-                postalCode: '94507',
-                addressCountry: 'US',
-              },
-              description:
-                'Serving the Bay Area for over 25 years with remodeling, additions, kitchens, bathrooms, decks, and more.',
-              sameAs: [
-                'https://www.facebook.com/BarsellConstruction',
-                'https://www.linkedin.com/in/john-barsell-1601891b/',
-              ],
-            }),
+            __html: JSON.stringify(structuredData),
           }}
         />
       </head>
-      <body
-        className={`antialiased text-secondary ${roboto.className} ${alegreyaSC.className}`}
-      >
-        <div
-          id='fixed-bg'
-          role='presentation'
-          aria-hidden='true'
-        ></div>
+      <body className={`${roboto.variable} ${alegreyaSC.variable}`}>
+        <a className='skip-link' href='#main-content'>
+          Skip to content
+        </a>
         <Header />
-        <PageTransition>
-          <main>{children}</main>
-        </PageTransition>
+        <main id='main-content'>{children}</main>
         <Footer />
       </body>
     </html>

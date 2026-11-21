@@ -17,14 +17,9 @@ export default {
         '2xl': '1536px',
       },
       colors: {
-        primary: 'orange', // orange color
-        secondary: '#000000', // black color
-        neutral: '#F8F8F8', // light gray for backgrounds, if needed
-        nav: 'rgba(0, 0, 0, 0.7)',
-        lightBlack: 'rgba(0, 0, 0, 0.4)',
-        heroWhite: 'rgba(255, 255, 255, 0.7)', // Semi-transparent white for hero section
-        lightWhite: 'rgba(255, 255, 255, 0.3)',
-        primaryFaded: 'rgba(255, 165, 0, 0.1)',
+        primary: '#FFA500',
+        secondary: '#111111',
+        neutral: '#F8F8F8',
       },
       fontFamily: {
         primary: ['Alegreya SC', 'serif'], // For headings
@@ -79,10 +74,7 @@ export default {
         lg: '0 10px 15px rgba(0, 0, 0, 0.1)', // Larger shadow
         xl: '0 20px 25px rgba(0, 0, 0, 0.1)', // Extra large shadow
       },
-      textShadow: {
-        md: '2px 2px 8px rgba(0, 0, 0, 0.6)', // Adding custom shadow effect
-      },
     },
   },
-  plugins: [require('tailwindcss-textshadow')],
+  plugins: [],
 };

@@ -1,188 +1,117 @@
-'use client';
+import PageHero from '@/components/ui/PageHero';
+import Icon from '@/components/ui/Icon';
+import ButtonLink from '@/components/ui/ButtonLink';
+import { site } from '@/data/site';
 
-import { useRef } from 'react';
-import {
-  faPhone,
-  faEnvelope,
-  faMapPin,
-} from '@fortawesome/free-solid-svg-icons';
-import {
-  faFacebook,
-  faLinkedin,
-  faHouzz,
-} from '@fortawesome/free-brands-svg-icons';
-import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import useScrollAnimation from '@/hooks/useScrollAnimation';
+export const metadata = {
+  title: 'Contact',
+  description:
+    'Call, text, or email Barsell Construction to discuss a residential construction or remodeling project in the Bay Area.',
+  alternates: { canonical: '/contact' },
+};
 
-const contactSections = [
+const contactItems = [
   {
-    items: [
-      {
-        icon: faPhone,
-        title: 'Call or Text',
-        value: '925-260-4331',
-        href: 'tel:+19252604331',
-        external: false,
-      },
-      {
-        icon: faEnvelope,
-        title: 'Email',
-        value: 'john@barsellconstruction.com',
-        href: 'mailto:johnbarsell@yahoo.com',
-        external: false,
-      },
-      {
-        icon: faLinkedin,
-        title: 'LinkedIn',
-        value: 'Visit Profile',
-        href: 'https://www.linkedin.com/in/john-barsell-1601891b/',
-        external: true,
-      },
-      {
-        icon: faFacebook,
-        title: 'Facebook',
-        value: 'Visit Page',
-        href: 'https://www.facebook.com/BarsellConstruction/',
-        external: true,
-      },
-      {
-        icon: faHouzz,
-        title: 'Houzz',
-        value: 'Visit Profile',
-        href: 'https://www.houzz.com/professionals/general-contractors/barsell-construction-inc-pfvwus-pf~1167174073',
-        external: true,
-      },
-    ],
+    icon: 'phone',
+    label: 'Call or text',
+    value: site.phone.display,
+    href: site.phone.href,
   },
   {
-    items: [
-      {
-        icon: faMapPin,
-        title: 'Location',
-        value: 'Alamo, CA',
-        href: 'https://maps.google.com?q=Alamo,+CA',
-        external: true,
-      },
-    ],
-    showMap: true,
+    icon: 'mail',
+    label: 'Email',
+    value: site.email.display,
+    href: site.email.href,
+  },
+  {
+    icon: 'map-pin',
+    label: 'Based in',
+    value: site.location,
+    href: 'https://maps.google.com?q=Alamo,+CA',
   },
 ];
 
-const ContactItem = ({ item, isLight }) => (
-  <a
-    href={item.href}
-    {...(item.external
-      ? { target: '_blank', rel: 'noopener noreferrer' }
-      : {})}
-    className='flex w-full items-center gap-5 group transition-colors'
-  >
-    <div
-      className={`flex-shrink-0 w-14 h-14 flex items-center justify-center text-primary transition-transform duration-300 group-hover:scale-110 rounded-full ${
-        isLight ? 'bg-black/25' : 'bg-white/40'
-      }`}
-    >
-      <FontAwesomeIcon icon={item.icon} className='w-6 h-6' />
-    </div>
-    <div className='flex flex-col overflow-hidden items-start text-left min-w-0'>
-      <p className='text-2xl sm:text-3xl font-bold mb-2'>{item.title}</p>
-      <p
-        className={`text-xl transition-colors duration-300 group-hover:underline truncate w-full ${
-          isLight
-            ? 'text-secondary/70 group-hover:text-secondary'
-            : 'text-white/85 group-hover:text-primary'
-        }`}
-      >
-        {item.value}
-      </p>
-    </div>
-  </a>
-);
-
-const ContactPage = () => {
-  const elementsRef = useRef([]);
-  const assignRef = useScrollAnimation(elementsRef, {
-    duration: 0.8,
-    delay: 0.1,
-  });
-
+export default function ContactPage() {
   return (
-    <div className='contact-page'>
-      <section className='hero bg-cover bg-center text-white p-2 sm:p-8 section-margin-top'>
-        <div className='container mx-auto text-center flex flex-col items-center py-32'>
-          <h1 className='sm:text-4xl xs:text-3xl text-xl font-semibold mb-4 text-shadow-md'>
-            Contact Us
-          </h1>
-          <p className='text-lg mb-6 text-shadow-md'>
-            For inquiries, quotes, or to discuss your project, please reach out
-            using the information below.
-          </p>
-        </div>
-      </section>
+    <>
+      <PageHero
+        eyebrow='Contact'
+        title='Tell us what you’re planning.'
+        description='For inquiries, estimates, or a conversation about your project, reach out directly using the information below.'
+      />
 
-      <section className='pb-0'>
-        <div className='mx-auto flex flex-col items-center'>
-          {contactSections.map((section, index) => {
-            const isLight = index % 2 === 0;
-            const isFirstSection = index === 0;
-
-            return (
-              <div
-                key={index}
-                ref={el => assignRef(el, index)}
-                className={`hero-section px-6 w-full ${
-                  isLight ? 'bg-heroWhite' : 'text-white text-shadow-md'
-                } py-16`}
+      <section className='section section--light contact-section'>
+        <div className='site-container contact-layout'>
+          <div className='contact-list'>
+            {contactItems.map(item => (
+              <a
+                className='contact-item'
+                href={item.href}
+                key={item.label}
+                {...(item.href.startsWith('http')
+                  ? { target: '_blank', rel: 'noopener noreferrer' }
+                  : {})}
               >
-                <div className='container mx-auto max-w-3xl flex flex-col gap-10 items-center'>
-                  <div
-                    className={`mx-auto flex flex-col ${
-                      isFirstSection ? '' : 'w-fit gap-10'
-                    }`}
-                  >
-                    {isFirstSection ? (
-                      <div className='w-fit mx-auto flex flex-col'>
-                        {section.items.map((item, itemIndex) => (
-                          <div
-                            key={item.title}
-                            className='relative py-10 first:pt-0 last:pb-0'
-                          >
-                            <ContactItem item={item} isLight={isLight} />
-                            {itemIndex < section.items.length - 1 && (
-                              <div className='absolute bottom-0 left-1/2 -translate-x-1/2 w-[min(100vw-3rem,36rem)] border-b border-black/20' />
-                            )}
-                          </div>
-                        ))}
-                      </div>
-                    ) : (
-                      section.items.map(item => (
-                        <ContactItem
-                          key={item.title}
-                          item={item}
-                          isLight={isLight}
-                        />
-                      ))
-                    )}
-                  </div>
+                <span className='contact-item__icon'>
+                  <Icon name={item.icon} />
+                </span>
+                <span>
+                  <small>{item.label}</small>
+                  <strong>{item.value}</strong>
+                </span>
+              </a>
+            ))}
+          </div>
 
-                  {section.showMap && (
-                    <div className='overflow-hidden shadow-md h-[320px] w-full'>
-                      <iframe
-                        title='Map of Alamo CA'
-                        className='w-full h-full'
-                        loading='lazy'
-                        allowFullScreen
-                        src='https://www.google.com/maps/embed/v1/place?key=AIzaSyAEM9yxS-4KUJ_TMWma817QnlirkhK6hzg&q=Alamo,CA'
-                      />
-                    </div>
-                  )}
-                </div>
-              </div>
-            );
-          })}
+          <aside className='project-planner'>
+            <p className='eyebrow'>Before you reach out</p>
+            <h2>A few details help start the conversation.</h2>
+            <p>
+              You do not need a finished plan. A simple description is enough
+              to begin.
+            </p>
+            <ul className='detail-list'>
+              <li>The type of project you are considering</li>
+              <li>Your home’s location</li>
+              <li>Your priorities for the space</li>
+              <li>Any timing or budget considerations</li>
+            </ul>
+            <div className='button-row'>
+              <ButtonLink
+                href={site.phone.href}
+                className='project-planner__phone'
+              >
+                Call or text
+              </ButtonLink>
+              <ButtonLink href={site.email.href} variant='outline'>
+                Send an email
+              </ButtonLink>
+            </div>
+          </aside>
         </div>
       </section>
-    </div>
-  );
-};
 
-export default ContactPage;
+      <section className='section section--orange contact-social'>
+        <div className='site-container contact-social__inner'>
+          <div>
+            <p className='eyebrow'>Follow the work</p>
+            <h2>Find Barsell Construction online.</h2>
+          </div>
+          <div className='social-links'>
+            {site.social.map(item => (
+              <a
+                href={item.href}
+                target='_blank'
+                rel='noopener noreferrer'
+                key={item.label}
+              >
+                <Icon name={item.icon} />
+                {item.label}
+              </a>
+            ))}
+          </div>
+        </div>
+      </section>
+    </>
+  );
+}

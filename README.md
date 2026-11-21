@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
+# Barsell Construction
 
-## Getting Started
+Static marketing site for Barsell Construction Inc., built with Next.js 15,
+React 19, and Tailwind CSS 3.
 
-First, run the development server:
+## Development
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Create the production static export with:
 
-You can start editing the page by modifying `app/page.js`. The page auto-updates as you edit the file.
+```bash
+npm run build
+```
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+The exported site is written to `out/`.
 
-## Learn More
+## Site structure
 
-To learn more about Next.js, take a look at the following resources:
+- `/` — homepage and service overview
+- `/services` — all residential services
+- `/services/[slug]` — individual service details
+- `/projects` — completed-project index
+- `/projects/[slug]` — project galleries
+- `/approach` — company principles and mission
+- `/contact` — direct contact details and social profiles
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+`/gallery` remains available as a compatibility route and uses `/projects` as
+its canonical URL.
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Content architecture
 
-## Deploy on Vercel
+- `src/data/site.js` contains shared company, contact, social, and navigation
+  details.
+- `src/data/services.js` contains service-page content.
+- `src/data/projects.js` defines project metadata and connects each project to
+  its gallery images.
+- `src/data/principles.js` contains the shared approach and process content.
+- `src/data/missionStatements.js` preserves the original mission language.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+The site uses project photography only in the Projects section. Other pages use
+the existing orange, black, and white brand palette with code-native icons and
+geometric CSS details.

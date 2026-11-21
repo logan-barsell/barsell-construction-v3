@@ -1,105 +1,69 @@
 'use client';
-import { useState, useEffect, useCallback } from 'react';
-import Logo from './Logo';
-import HamburgerMenu from './HamburgerMenu';
-import NavLinks from './NavLinks';
-import useIsMobile from '@/hooks/useIsMobile';
-import useHideOnScroll from '@/hooks/useHideOnScroll';
-import ClickOutside from './ClickOutside';
+
+import { useEffect, useState } from 'react';
+import Link from 'next/link';
 import { usePathname } from 'next/navigation';
+import Logo from './Logo';
+import Icon from '@/components/ui/Icon';
+import { navigation, site } from '@/data/site';
 
-const Header = () => {
-  const [state, setState] = useState({
-    activeLink: null,
-    hoveredLink: null,
-    menuOpen: false,
-  });
-
-  const isMobile = useIsMobile(640);
-  const showNav = useHideOnScroll();
-
+export default function Header() {
+  const [menuOpen, setMenuOpen] = useState(false);
   const pathname = usePathname();
 
   useEffect(() => {
-    setState(prevState => ({ ...prevState, activeLink: pathname }));
+    setMenuOpen(false);
   }, [pathname]);
 
   useEffect(() => {
-    if (!isMobile) {
-      setState(prevState => ({ ...prevState, menuOpen: false }));
-    }
-  }, [isMobile]);
+    document.body.classList.toggle('menu-open', menuOpen);
+    return () => document.body.classList.remove('menu-open');
+  }, [menuOpen]);
 
-  const handleLinkClick = useCallback(link => {
-    setState(prevState => ({
-      ...prevState,
-      menuOpen: false,
-    }));
-  }, []);
-
-  const handleMouseEnter = useCallback(
-    link => setState(prevState => ({ ...prevState, hoveredLink: link })),
-    []
-  );
-
-  const handleMouseLeave = useCallback(() => {
-    setState(prevState => ({ ...prevState, hoveredLink: null }));
-  }, []);
-
-  const toggleMenu = useCallback(() => {
-    setState(prevState => ({ ...prevState, menuOpen: !prevState.menuOpen }));
-  }, []);
-
-  const handleClickOutside = () => {
-    setState(prevState => ({ ...prevState, menuOpen: false })); // Close menu on click outside
-  };
+  const isActive = href =>
+    href === '/' ? pathname === '/' : pathname.startsWith(href);
 
   return (
-    <ClickOutside onClickOutside={handleClickOutside}>
-      <header
-        className={`z-40 bg-nav p-2 pt-0 pb-0 xs:p-6 xs:pb-0 xs:pt-0 shadow-md text-white border-solid border-b border-primary  fixed w-full top-0 transition-all duration-300 ease-in-out transform ${
-          showNav ? 'translate-y-0' : '-translate-y-full'
-        }`}
-      >
-        <nav className='mx-auto flex justify-between items-start xs:items-end'>
-          <div className='hidden lg:block lg:w-1/3 lg:flex lg:justify-start'>
-            <h1 className='text-2xl leading-normal '>
-              Barsell Construction Inc.
-            </h1>
-          </div>
+    <header className='site-header'>
+      <div className='site-container site-header__inner'>
+        <Logo />
 
-          {/* Logo and Company Name */}
-          <div className='lg:w-1/3 lg:flex lg:justify-center'>
-            <Logo
-              menuOpen={state.menuOpen}
-              isMobile={isMobile}
-            />
-          </div>
+        <nav
+          id='primary-navigation'
+          className={`site-nav ${menuOpen ? 'site-nav--open' : ''}`}
+          aria-label='Primary navigation'
+        >
+          <ul>
+            {navigation.map(item => (
+              <li key={item.href}>
+                <Link
+                  href={item.href}
+                  className={isActive(item.href) ? 'is-active' : ''}
+                  aria-current={isActive(item.href) ? 'page' : undefined}
+                >
+                  {item.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
 
-          <div className='lg:w-1/3 lg:flex lg:justify-end'>
-            <div className='flex flex-col items-end pt-3 xs:pt-6'>
-              {/* Hamburger Icon for Mobile */}
-              <HamburgerMenu
-                toggleMenu={toggleMenu}
-                menuOpen={state.menuOpen}
-              />
-
-              {/* Navigation Links */}
-              <NavLinks
-                menuOpen={state.menuOpen}
-                isMobile={isMobile}
-                activeLink={state.activeLink}
-                hoveredLink={state.hoveredLink}
-                handleLinkClick={handleLinkClick}
-                handleMouseEnter={handleMouseEnter}
-                handleMouseLeave={handleMouseLeave}
-              />
-            </div>
-          </div>
+          <a className='site-nav__phone' href={site.phone.href}>
+            <Icon name='phone' />
+            <span>{site.phone.display}</span>
+          </a>
         </nav>
-      </header>
-    </ClickOutside>
-  );
-};
 
-export default Header;
+        <button
+          type='button'
+          className='menu-toggle'
+          aria-label={menuOpen ? 'Close navigation' : 'Open navigation'}
+          aria-controls='primary-navigation'
+          aria-expanded={menuOpen}
+          onClick={() => setMenuOpen(open => !open)}
+        >
+          <Icon name={menuOpen ? 'close' : 'menu'} />
+        </button>
+      </div>
+    </header>
+  );
+}
